@@ -1,30 +1,47 @@
+
+//  写html 
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
+<div>
+  <div>bot名称: {{ bot_name }}</div>
+  <div>bot战力: {{ bot_rating }}</div>
+</div>
   <router-view/>
 </template>
 
+
+// 写后端给前端的代码
+<script>
+import $ from 'jquery'
+import { ref } from 'vue'
+
+export default {
+  name: "App",
+  // 这个是执行入口
+  setup: () => {
+    let bot_name = ref("");
+    let bot_rating = ref("");
+
+    $.ajax({
+      url: "http://127.0.0.1:3000/pk/getbotinfo/",
+      type: "get",
+      success: resp=> {
+        bot_name.value = resp.name;
+        bot_rating.value = resp.rating;
+      }
+    });
+
+    return{
+      bot_name,
+      bot_rating
+    }
+  },
+}
+</script>
+
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-nav {
-  padding: 30px;
-}
-
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
+body{
+  /* @ 可以替换 . */
+  background: url("./assets/background.png") no-repeat;
+  background-size: cover;
 }
 </style>

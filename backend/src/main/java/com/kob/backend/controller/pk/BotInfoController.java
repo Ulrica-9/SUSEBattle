@@ -23,8 +23,8 @@ public class BotInfoController {
     @RequestMapping("getbotinfo/")
    public Map<String,String> getBotInfo(){
         Map<String,String> map = new HashMap<>();
-        map.put("name","xiaoxin");
-        map.put("age","20");
+        map.put("name","xinxin");
+        map.put("rating","1500");
         return map;
     }
 }
