@@ -13,19 +13,18 @@ import java.util.Map;
  * @Date 2022/10/28 0:33
  */
 // 前后端分离
+    /*
+    *  @RestController - 返回的是数据
+    *  @Controller - 返回的是
+    * */
 @RestController
 @RequestMapping("/pk/")
 public class BotInfoController {
     @RequestMapping("getbotinfo/")
-    public List<Map<String,String>> getBotInfo(){
-        List<Map<String,String>> list = new LinkedList<>();
-        Map<String,String> bot1 = new HashMap<>();
-        bot1.put("name","xiaoxin");
-        bot1.put("rating","100");
-        Map<String,String> bot2 = new HashMap<>();
-        bot2.put("name","xiaoluo");
-        bot2.put("rating","150");
-        list.add(bot1);list.add(bot2);
-        return list;
+   public Map<String,String> getBotInfo(){
+        Map<String,String> map = new HashMap<>();
+        map.put("name","xiaoxin");
+        map.put("age","20");
+        return map;
     }
 }
