@@ -17,6 +17,7 @@ export default {
   components: {
     NavBar,
   },
+  setup() {},
 };
 </script>
 

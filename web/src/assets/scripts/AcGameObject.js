@@ -1,44 +1,39 @@
-const AC_GAME_OBJECT = [];
+const AC_GAME_OBJECTS = [];
 
 export class AcGameObject {
-    // 构造函数
     constructor() {
-        AC_GAME_OBJECT.push(this);
+        AC_GAME_OBJECTS.push(this);
         this.timedelta = 0;
         this.has_called_start = false;
     }
 
-    start() { // 只执行一次 (第一帧执行)
-
+    start() { // 只执行一次
     }
 
-    update() { // 每一帧执行一次, 第一帧除外
+    update() { // 每一帧执行一次，除了第一帧之外
 
     }
 
     on_destroy() { // 删除之前执行
 
-
     }
 
+    destroy() {
+        this.on_destroy();
 
-    destroy() { // 删除
-        this.on_destroy(); // 删除之前执行
-        for (let i in AC_GAME_OBJECT) {
-            const obj = AC_GAME_OBJECT[i];
-            if (obj == this) {
-                AC_GAME_OBJECT.splice(i); // 移除当前元素
+        for (let i in AC_GAME_OBJECTS) {
+            const obj = AC_GAME_OBJECTS[i];
+            if (obj === this) {
+                AC_GAME_OBJECTS.splice(i);
                 break;
             }
         }
     }
 }
 
-// 上一次执行的时刻
-let last_timestamp;
+let last_timestamp; // 上一次执行的时刻
 const step = timestamp => {
-    for (let obj of AC_GAME_OBJECT) {
-        //  如果没有执行过 -> start() 函数
+    for (let obj of AC_GAME_OBJECTS) {
         if (!obj.has_called_start) {
             obj.has_called_start = true;
             obj.start();
@@ -47,8 +42,9 @@ const step = timestamp => {
             obj.update();
         }
     }
+
     last_timestamp = timestamp;
     requestAnimationFrame(step)
 }
 
-requestAnimationFrame(step);
+requestAnimationFrame(step)

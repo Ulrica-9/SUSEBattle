@@ -4,7 +4,7 @@
   <!-- 这里是pk界面的地图部分 -->
   <div ref="parent" class="gamemap">
     <!-- canvas - 画布 -->
-    <canvas ref="canvas"></canvas>
+    <canvas ref="canvas" tabindex="0"></canvas>
   </div>
 </template>
 

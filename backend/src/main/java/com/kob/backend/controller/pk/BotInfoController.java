@@ -15,7 +15,8 @@ import java.util.Map;
 // 前后端分离
     /*
     *  @RestController - 返回的是数据
-    *  @Controller - 返回的是
+    *  @Controller - 返回的是网页
+    *
     * */
 @RestController
 @RequestMapping("/pk/")

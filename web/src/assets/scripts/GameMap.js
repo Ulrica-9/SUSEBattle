@@ -1,4 +1,5 @@
 import { AcGameObject } from "./AcGameObject";
+import { Snake } from "./Snake";
 import { Wall } from "./Wall";
 
 //  创建的地图视图 *  地图会进行一个改变 计算最大矩形 (脚本算法 -- 不要动)
@@ -13,12 +14,21 @@ export class GameMap extends AcGameObject {
 
         this.L = 0; // 绝对距离
 
-
-        this.cols = 13;
+        this.cols = 14;
         this.rows = 13;
 
         this.inner_walls_count = 10; // 在墙的内部 有多少个障碍物 (动态进行调整)
         this.walls = []; // 存储所有wall - 墙 [障碍物]
+
+        // 创建蛇 (创建两条蛇)
+        this.snakes = [
+            new Snake({ id: 0, color: '#4876Ec', r: this.rows - 2, c: 1 }, this),
+            new Snake({ id: 1, color: '#F94848', r: 1, c: this.cols - 2 }, this)
+        ];
+
+
+
+
 
     }
 
@@ -69,14 +79,14 @@ export class GameMap extends AcGameObject {
                 let r = parseInt(Math.random() * this.rows)
                 let c = parseInt(Math.random() * this.cols)
                     // 如果已经有了就跳过
-                if (g[r][c] || g[c][r]) continue;
+                if (g[r][c] || g[this.rows - 1 - r][this.cols - 1 - c]) continue;
                 // 因为左下和右上是蛇的诞生 所以也要跳过
                 if (r == this.rows - 2 && c == 1 || r == 1 && c == this.cols - 2) continue;
-                g[r][c] = g[c][r] = true;
-                break; // 当前搜索就退出
+                //  产生地图
+                g[r][c] = g[this.rows - 1 - r][this.cols - 1 - c] = true;
+                break;
             }
         }
-
         // 转为json
         const copy_g = JSON.parse(JSON.stringify(g));
 
@@ -96,11 +106,33 @@ export class GameMap extends AcGameObject {
         // 成功创建 （连通）
         return true;
     }
+
+    // 键盘事件
+    add_listening_events() {
+        this.ctx.canvas.focus();
+        // 键盘事件 - 获取输入
+        const [snake0, snake1] = this.snakes;
+        this.ctx.canvas.addEventListener('keydown', e => {
+            if (e.key === "w") snake0.set_direction(0);
+            else if (e.key === "d") snake0.set_direction(1);
+            else if (e.key === "s") snake0.set_direction(2);
+            else if (e.key === "a") snake0.set_direction(3);
+            else if (e.key === "ArrowUp") snake1.set_direction(0);
+            else if (e.key === "ArrowRight") snake1.set_direction(1);
+            else if (e.key === "ArrowDown") snake1.set_direction(2);
+            else if (e.key === "ArrowLeft") snake1.set_direction(3);
+        });
+    }
+
+
     start() { // 只执行一次
         for (let i = 0; i < 1024; i++) {
-            if (this.create_walls()) break; // 成功找到就退出 没有则继续寻找
+            if (this.create_walls())
+                break; // 成功找到就退出 没有则继续寻找
         }
+        this.add_listening_events();
     }
+
 
     // 这个函数不要动 这里是算法
     update_size() {
@@ -109,8 +141,52 @@ export class GameMap extends AcGameObject {
         this.ctx.canvas.width = this.L * this.cols;
         this.ctx.canvas.height = this.L * this.rows;
     }
+
+
+    check_ready() {
+        // 蛇移动(两个蛇是否准备好下一回合)
+        for (const snake of this.snakes) {
+            if (snake.status !== "idle") return false;
+            if (snake.direction === -1) return false;
+        }
+        return true;
+    }
+
+    next_step() {
+        // 两条蛇进入下一回合
+        for (const snake of this.snakes) {
+            snake.next_step();
+        }
+    }
+
+    check_vaild(cell) {
+        // 检测目标位置是否合法： 没有撞到 两条蛇的身体和障碍物
+        // wall
+        for (const wall of this.walls) {
+            if (wall.r === cell.r && wall.c === cell.c)
+                return false
+        }
+
+
+        // snake
+        for (const snake of this.snakes) {
+            let k = snake.cells.length;
+            if (!snake.check_tail_increasing())
+                k--;
+
+            for (let i = 0; i < k; i++) {
+                if (snake.cells[i].r === cell.r && snake.cells[i].c === cell.c)
+                    return false;
+            }
+        }
+
+        return true;
+    }
     update() { // 以后每一帧都执行一次
         this.update_size(); // 每一帧都更新我们的长度
+        if (this.check_ready()) {
+            this.next_step();
+        }
         this.render();
 
     }
