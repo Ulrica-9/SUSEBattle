@@ -26,7 +26,9 @@
             />
           </div>
           <div class="error-message">{{ error_message }}</div>
-          <button type="submit" class="btn btn-primary">登录</button>
+          <button type="submit" class="btn btn-primary" style="width: 100%">
+            登录
+          </button>
         </form>
       </div>
     </div>
@@ -91,9 +93,6 @@ export default {
 </script>
 
 <style scope>
-button {
-  width: 100%;
-}
 .error-message {
   color: red;
 }
