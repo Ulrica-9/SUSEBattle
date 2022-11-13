@@ -1,16 +1,11 @@
-
 <template>
-  <!-- 
-      navbar-light   bg-light - 浅色
-      navbar-dark   bg-dark  - 深色
-   -->
   <!--  导航栏 -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
       <!-- <a class="navbar-brand" href="/">King of Bots</a> -->
       <!-- 注释掉的内容进行与router-link平行替换 就不会刷新页面进行跳转了 -->
       <router-link class="navbar-brand" :to="{ name: 'home' }">
-        King of Bots
+        对战平台
       </router-link>
       <!--  左边选项 -->
       <div class="collapse navbar-collapse" id="navbarText">
@@ -51,7 +46,7 @@
         </ul>
 
         <!-- 右边 -->
-        <ul class="navbar-nav">
+        <ul class="navbar-nav" v-if="$store.state.user.is_login">
           <li class="nav-item dropdown">
             <a
               class="nav-link dropdown-toggle"
@@ -61,21 +56,48 @@
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              luotianyu
+              {{ $store.state.user.username }}
             </a>
+
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
               <li>
-                <!-- <a class="dropdown-item" href="/user/bot/">我的Bot</a> -->
                 <router-link
                   class="dropdown-item"
                   :to="{ name: 'user_bot_index' }"
                 >
-                  排行榜
+                  我的Bot
                 </router-link>
               </li>
               <li><hr class="dropdown-divider" /></li>
-              <li><a class="dropdown-item" href="#">退出</a></li>
+              <li>
+                <a class="dropdown-item" href="#" @click="logout">退出</a>
+              </li>
             </ul>
+          </li>
+        </ul>
+
+        <!-- 右边 -->
+        <ul class="navbar-nav" v-else>
+          <!-- 登录 -->
+          <li class="nav-item">
+            <router-link
+              class="nav-link"
+              :to="{ name: 'user_msg_login' }"
+              role="button"
+            >
+              登录
+            </router-link>
+          </li>
+
+          <!-- 注册 -->
+          <li class="nav-item">
+            <router-link
+              class="nav-link"
+              :to="{ name: 'user_msg_register' }"
+              role="button"
+            >
+              注册
+            </router-link>
           </li>
         </ul>
       </div>
@@ -86,15 +108,23 @@
 <script>
 // 取得当前在哪个页面 并对其标签进行高亮显示
 import { useRoute } from "vue-router";
-import { computed } from "vue"; // 实时计算
+import { computed } from "vue";
+import { useStore } from "vuex";
 
 export default {
   setup() {
+    const store = useStore();
     const route = useRoute();
     let route_name = computed(() => route.name);
 
+    //  触发函数
+    const logout = () => {
+      store.dispatch("logout");
+    };
+
     return {
       route_name,
+      logout,
     };
   },
 };

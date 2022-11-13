@@ -10,6 +10,7 @@
 
 <script>
 // 引用 js脚本进来
+
 import { GameMap } from "@/assets/scripts/GameMap";
 import { ref, onMounted } from "vue"; // onMounted 当组件挂载完之后，需要创建对象
 

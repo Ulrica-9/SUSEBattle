@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+
+// 解决跨域问题
 @Configuration
 public class CorsConfig implements Filter {
     @Override
@@ -34,7 +36,6 @@ public class CorsConfig implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) {
-
     }
 
     @Override

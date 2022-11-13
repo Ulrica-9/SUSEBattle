@@ -1,11 +1,9 @@
-
 <template>
   <PlayGround />
 </template>
 
 <script>
-// 引用棋盘组件
-import PlayGround from "../../components/PlayGround";
+import PlayGround from "../../components/PlayGround.vue";
 
 export default {
   components: {
@@ -14,5 +12,5 @@ export default {
 };
 </script>
 
-<style scope>
+<style scoped>
 </style>
