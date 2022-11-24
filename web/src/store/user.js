@@ -34,7 +34,7 @@ export default {
     },
     //  接口对接
     actions: {
-        //  第一个向后端的请求函数 
+        //  第一个向后端的请求函数 - 登录
         login(context, data) {
             $.ajax({
                 url: "http://localhost:4000/user/msg/token/",

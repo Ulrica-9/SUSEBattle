@@ -1,13 +1,76 @@
 <template>
-  <PlayGround />
+  <!-- playing 是对战界面 
+       matching 是匹配
+   -->
+  <PlayGround v-if="$store.state.pk.status === 'playing'" />
+  <MatchGround v-if="$store.state.pk.status === 'matching'" />
 </template>
 
 <script>
 import PlayGround from "../../components/PlayGround.vue";
+// 匹配界面
+import MatchGround from "../../components/MatchGround.vue";
+import { onMounted, onUnmounted } from "vue";
+import { useStore } from "vuex";
 
 export default {
   components: {
     PlayGround,
+    MatchGround,
+  },
+  setup() {
+    const store = useStore();
+    const socketUrl = `ws://127.0.0.1:4000/websocket/${store.state.user.token}/`;
+
+    //  当前页面打开的时候执行
+    let socket = null;
+    onMounted(() => {
+      // 自行先设计一个头像
+      store.commit("updateOpponent", {
+        username: "???",
+        photo:
+          "https://cdn.acwing.com/media/article/image/2022/08/09/1_1db2488f17-anonymous.png",
+      });
+
+      socket = new WebSocket(socketUrl);
+
+      //  打开的时候
+      socket.onopen = () => {
+        console.log("connected!");
+        // 更新到全局
+        store.commit("updateSocket", socket);
+      };
+
+      // 从客户端接收消息的时候
+      socket.onmessage = (msg) => {
+        const data = JSON.parse(msg.data);
+        // console.log(data);
+        if (data.event === "start-matching") {
+          //  匹配成功
+          store.commit("updateOpponent", {
+            username: data.opponent_username,
+            photo: data.opponent_photo,
+          });
+
+          // 成功之后跳转到成功页面 (这里加一个延迟 体现更好的交互性)
+          setTimeout(() => {
+            store.commit("updateStatus", "playing");
+          }, 2000);
+          // 更新一下后端传过来的地图
+          store.commit("updateGamemap", data.gamemap);
+        }
+      };
+
+      // 关闭时候执行
+      socket.onclose = () => {
+        console.log("disconnected!");
+        store.commit("updateStatus", "matching");
+      };
+    });
+
+    onUnmounted(() => {
+      socket.close(); // 当前页面被取消挂载的时候  断开连接
+    });
   },
 };
 </script>

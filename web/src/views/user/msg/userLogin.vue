@@ -50,7 +50,6 @@ export default {
     let username = ref("");
     let password = ref("");
     let error_message = ref("");
-
     //  进入登录页面就判断本地是否有token
     const jwt_token = localStorage.getItem("jwt_token");
     if (jwt_token) {

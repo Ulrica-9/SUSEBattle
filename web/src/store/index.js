@@ -1,4 +1,5 @@
 import { createStore } from "vuex"
+import ModulePk from './pk'
 import ModuleUser from './user'
 
 export default createStore({
@@ -8,5 +9,6 @@ export default createStore({
     actions: {},
     modules: {
         user: ModuleUser,
+        pk: ModulePk,
     }
 })

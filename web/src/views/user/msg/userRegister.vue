@@ -7,6 +7,16 @@
         <!--  表单样式 -->
         <form @submit.prevent="register">
           <div class="mb-3">
+            <label for="pic" class="form-label">请选择你的头像</label>
+            <input
+              v-model="photo"
+              type="text"
+              class="form-control"
+              id="photo"
+              placeholder="请再次输入密码"
+            />
+          </div>
+          <div class="mb-3">
             <label for="username" class="form-label">用户名</label>
             <input
               v-model="username"
@@ -36,6 +46,7 @@
               placeholder="请再次输入密码"
             />
           </div>
+
           <div class="error-message">{{ error_msg }}</div>
           <button type="submit" class="btn btn-primary" style="width: 100%">
             注册
@@ -63,6 +74,7 @@ export default {
     let username = ref("");
     let password = ref("");
     let pwd2 = ref("");
+    let photo = ref("");
     var error_msg = ref("");
 
     const register = () => {
@@ -75,6 +87,7 @@ export default {
           username: username.value,
           password: password.value,
           pwd2: pwd2.value,
+          pic: photo.value,
         },
         success(resp) {
           if (resp.error_msg === "success") {
@@ -89,6 +102,7 @@ export default {
       username,
       password,
       pwd2,
+      photo,
       error_msg,
       register,
     };

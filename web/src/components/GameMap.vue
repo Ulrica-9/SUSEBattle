@@ -12,16 +12,19 @@
 // 引用 js脚本进来
 
 import { GameMap } from "@/assets/scripts/GameMap";
-import { ref, onMounted } from "vue"; // onMounted 当组件挂载完之后，需要创建对象
+// onMounted 当组件挂载完之后，需要创建对象
+import { ref, onMounted } from "vue";
+import { useStore } from "vuex";
 
 export default {
   setup() {
+    const store = useStore();
     let parent = ref(null);
     let canvas = ref(null);
 
     // 挂载完毕之后
     onMounted(() => {
-      new GameMap(canvas.value.getContext("2d"), parent.value);
+      new GameMap(canvas.value.getContext("2d"), parent.value, store);
     });
 
     return {

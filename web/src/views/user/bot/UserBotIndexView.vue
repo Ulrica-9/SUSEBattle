@@ -13,7 +13,6 @@
       </div>
 
       <!-- 主体部分我画9份  right-->
-
       <div class="col-9">
         <div class="card" style="margin-top: 20px">
           <div class="card-header">
@@ -79,6 +78,7 @@
                         lang="c_cpp"
                         theme="textmate"
                         style="height: 300px"
+                        :options="{ fontSize: 16 }"
                       />
                       <!-- <textarea
                         v-model="botadd.content"
@@ -207,6 +207,7 @@
                                 lang="c_cpp"
                                 theme="textmate"
                                 style="height: 300px"
+                                :options="{ fontSize: 20 }"
                               />
                               <!-- <textarea
                                 v-model="bot.content"
