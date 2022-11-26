@@ -4,12 +4,16 @@
    -->
   <PlayGround v-if="$store.state.pk.status === 'playing'" />
   <MatchGround v-if="$store.state.pk.status === 'matching'" />
+  <ResultBoard v-if="$store.state.pk.loser != 'none'" />
 </template>
 
 <script>
 import PlayGround from "../../components/PlayGround.vue";
 // 匹配界面
 import MatchGround from "../../components/MatchGround.vue";
+// 胜负界面
+import ResultBoard from "../../components/ResultBoard.vue";
+
 import { onMounted, onUnmounted } from "vue";
 import { useStore } from "vuex";
 
@@ -17,6 +21,7 @@ export default {
   components: {
     PlayGround,
     MatchGround,
+    ResultBoard,
   },
   setup() {
     const store = useStore();
@@ -55,9 +60,31 @@ export default {
           // 成功之后跳转到成功页面 (这里加一个延迟 体现更好的交互性)
           setTimeout(() => {
             store.commit("updateStatus", "playing");
-          }, 2000);
-          // 更新一下后端传过来的地图
-          store.commit("updateGamemap", data.gamemap);
+          }, 200);
+          // 更新一下后端传过来的地图u
+          store.commit("updateGame", data.game);
+        } else if (data.event === "move") {
+          console.log(data);
+          const game = store.state.pk.gameObject;
+          const [snake0, snake1] = game.snakes;
+          snake0.set_direction(data.a_direction);
+          snake1.set_direction(data.b_direction);
+        } else if (data.event === "result") {
+          //  这里是取出两条蛇出来 用来进行反馈一个结果
+          console.log(data);
+          const game = store.state.pk.gameObject;
+          const [snake0, snake1] = game.snakes;
+
+          //  判断两条蛇去世的状态
+          if (data.loser === "all" || data.loser === "A") {
+            snake0.status = "die"; //死
+          }
+          if (data.loser === "all" || data.loser === "B") {
+            snake1.status = "die"; // 死
+          }
+
+          //  去世之后更新失败者
+          store.commit("updateLoser", data.loser);
         }
       };
 

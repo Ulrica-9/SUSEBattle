@@ -85,11 +85,12 @@ export class Snake extends AcGameObject {
             this.cells[i] = JSON.parse(JSON.stringify(this.cells[i - 1]))
         }
 
+        // if (!this.gamemap.check_vaild(this.next_cell)) {
+        //     // 如果下一步不合法 - > 蛇去世
+        //     this.status = "die";
+        // } 后端去判断代码.
 
-        if (!this.gamemap.check_vaild(this.next_cell)) {
-            // 如果下一步不合法 - > 蛇去世
-            this.status = "die";
-        }
+
 
 
         this.eye_direction = d;
@@ -186,8 +187,6 @@ export class Snake extends AcGameObject {
             ctx.arc(eye_x, eye_y, L * 0.1, 0, Math.PI * 2)
             ctx.fill(); // 生成
         }
-
-
 
 
 
