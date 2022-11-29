@@ -6,51 +6,30 @@
       <div class="col-3">
         <!--  表单样式 -->
         <form @submit.prevent="register">
+
           <div class="mb-3">
-            <label for="pic" class="form-label">请选择你的头像</label>
-            <input
-              v-model="photo"
-              type="text"
-              class="form-control"
-              id="photo"
-              placeholder="请再次输入密码"
-            />
+            <label for="photo" class="form-label">上传头像</label>
+            <input v-model="photo" type="text" class="form-control" id="photo" placeholder="请输入头像URL" />
           </div>
+
           <div class="mb-3">
             <label for="username" class="form-label">用户名</label>
-            <input
-              v-model="username"
-              type="text"
-              class="form-control"
-              id="username"
-              placeholder="请输入用户名"
-            />
+            <input v-model="username" type="text" class="form-control" id="username" placeholder="请输入用户名" />
           </div>
           <div class="mb-3">
             <label for="password" class="form-label">密码</label>
-            <input
-              v-model="password"
-              type="password"
-              class="form-control"
-              id="password"
-              placeholder="请输入密码"
-            />
+            <input v-model="password" type="password" class="form-control" id="password" placeholder="请输入密码" />
+
           </div>
           <div class="mb-3">
             <label for="password" class="form-label">确认密码</label>
-            <input
-              v-model="pwd2"
-              type="password"
-              class="form-control"
-              id="pwd2"
-              placeholder="请再次输入密码"
-            />
+            <input v-model="pwd2" type="password" class="form-control" id="pwd2" placeholder="请再次输入密码" />
           </div>
-
           <div class="error-message">{{ error_msg }}</div>
           <button type="submit" class="btn btn-primary" style="width: 100%">
             注册
           </button>
+
         </form>
       </div>
     </div>
@@ -64,6 +43,7 @@ import { ref } from "vue";
 
 import router from "../../../router/index";
 import $ from "jquery";
+
 
 export default {
   components: {
@@ -108,6 +88,8 @@ export default {
     };
   },
 };
+
+
 </script>
 
 <style scope>

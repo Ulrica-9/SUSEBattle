@@ -34,7 +34,6 @@ const routes = [{
             // 是否需要授权
             requestAuth: true,
         }
-
     },
     // 排行榜
     {
