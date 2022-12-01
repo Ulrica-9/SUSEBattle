@@ -29,8 +29,6 @@ public class InfoServiceImpl implements InfoService {
         UserDetailsImpl loginUser = (UserDetailsImpl) authenticationToken.getPrincipal();
         User user = loginUser.getUser();
 
-
-
         Map<String, String> map = new HashMap<>();
         map.put("error_message","success");
         map.put("id",user.getId().toString());
@@ -39,4 +37,5 @@ public class InfoServiceImpl implements InfoService {
         map.put("photo",user.getPhoto());
         return map;
     }
+
 }

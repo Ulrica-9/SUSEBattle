@@ -27,6 +27,10 @@ public class RegisterController {
         String password = map.get("password");
         String confirmedPassword = map.get("pwd2");
         String pic = map.get("pic");
-        return registerService.getRegister(username, password, confirmedPassword,pic);
+        String school = map.get("school");
+        String email = map.get("email");
+        String personal = "";
+        String sex = "";
+        return registerService.getRegister(username, password, confirmedPassword,pic,school,email,personal,sex);
     }
 }
