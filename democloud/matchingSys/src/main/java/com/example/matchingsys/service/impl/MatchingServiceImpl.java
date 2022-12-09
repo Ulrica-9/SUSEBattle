@@ -16,10 +16,10 @@ import org.springframework.stereotype.Service;
 public class MatchingServiceImpl implements MatchingService {
     public final static MatchingPool matchingPool = new MatchingPool();
     @Override
-    public String add_one_player(Integer userID, Integer rating) {
+    public String add_one_player(Integer userID, Integer rating,Integer botId) {
         System.out.println("add  player: " + userID+  " " + rating);
         // 匹配池 + user
-        matchingPool.add_Player(userID,rating);
+        matchingPool.add_Player(userID,rating,botId);
         return "add player success";
     }
 

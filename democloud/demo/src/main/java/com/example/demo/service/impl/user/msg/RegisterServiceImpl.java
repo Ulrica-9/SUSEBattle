@@ -79,7 +79,7 @@ public class RegisterServiceImpl implements RegisterService {
         // 进行密码加密之后存储
         String encodePassword = passwordEncoder.encode(password);
         // 图片资源 (现阶段随机放一张图片)
-        String photo = " ";
+        String photo = "";
         if(pic == null || pic.length() == 0){
             // 默认头像
             photo = "https://cdn.staticaly.com/gh/Ulrica-9/images@master/img_Picgo/20221106173004.png";
@@ -93,7 +93,7 @@ public class RegisterServiceImpl implements RegisterService {
 
         // 创建 (id 自增 直接设置为 null)
         User user = new User(null,name,encodePassword,photo,1500);
-        userMapper.insert(user);
+        userMapper.insert(user); // 放到数据库中
         map.put("error_msg","success");
         return map;
     }

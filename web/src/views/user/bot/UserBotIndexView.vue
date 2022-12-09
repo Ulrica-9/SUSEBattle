@@ -8,6 +8,16 @@
         <div class="card" style="margin-top: 20px">
           <div class="card-body">
             <img :src="$store.state.user.photo" alt="" style="width: 100%" />
+
+          </div>
+
+          <div class="card-body" style="text-align: center">
+
+            <span class="record-user-username">
+              Hi~<H3>{{$store.state.user.username}}</H3>
+              快来bot一下吧~
+            </span>
+
           </div>
         </div>
       </div>
@@ -80,15 +90,19 @@
             <table class="table table-striped table-hover">
               <thead>
                 <tr>
-                  <th>名称</th>
+                  <th>对战Bot名称</th>
+                  <th>描述</th>
                   <th>创建时间</th>
+                  <th>修改时间</th>
                   <th>操作</th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="bot in bots" :key="bot.id">
                   <td>{{ bot.name }}</td>
+                  <td>{{ bot.description }}</td>
                   <td>{{ bot.createtime }}</td>
+                  <td>{{ bot.modifytime }}</td>
                   <td>
                     <button type="button" class="btn btn-success" style="margin-right: 10px" data-bs-toggle="modal" :data-bs-target="'#update-bot-modal-' + bot.id">
                       修改
@@ -296,11 +310,49 @@ export default {
 };
 </script>
 
-<style scope>
+<style scoped lang="less">
+tr {
+  border-color: white;
+}
+
 .title {
   font-size: 130%;
 }
+
 .error_message {
-  color: red;
+  color: rgb(252, 0, 0);
+}
+
+.card {
+  border: 0;
+  background-color: rgb(238, 238, 238);
+  color: rgb(108, 108, 108);
+}
+
+.card-header {
+  background-color: rgb(218, 218, 218);
+  border-bottom: 0;
+}
+
+th {
+  color: rgb(100, 100, 100);
+}
+
+.btn {
+  background-color: rgba(255, 255, 255, 1);
+  border: 0px solid black;
+  transition: all 0.2s ease-in-out;
+  color: black;
+
+  &:active {
+    background-color: rgb(0, 0, 0);
+    color: white;
+  }
+
+  &:hover {
+    background-color: rgb(0, 0, 0);
+    color: white;
+  }
 }
 </style>
+

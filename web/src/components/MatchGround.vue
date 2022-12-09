@@ -13,10 +13,10 @@
 
       <div class="col-4">
         <div class="user-select-bot">
-          <select class="form-select  form-select-lg mb-3" aria-label=".form-select-sm example">
-            <option value="-1" selected>真人执行</option>
+          <select v-model="select_bot" class="form-select" aria-label="Default select example">
+            <option value="-1" selected>亲自出马</option>
             <option v-for="bot in bots" :key="bot.id" :value="bot.id">
-              代码执行
+              {{ bot.name  }}
             </option>
           </select>
         </div>
@@ -36,6 +36,7 @@
           {{ match_btn_info }}
         </button>
       </div>
+
     </div>
   </div>
 </template>
@@ -43,22 +44,25 @@
 <script>
 import { ref } from "vue";
 import { useStore } from "vuex";
-import $ from "jquery";
+import $ from "jquery"
 
 export default {
   setup() {
     let match_btn_info = ref("开始匹配");
     const store = useStore();
+
     let bots = ref([]);
+    let select_bot = ref("-1");
 
     const click_match_btn = () => {
       if (match_btn_info.value === "开始匹配") {
         match_btn_info.value = "取消";
-
+        // console.log(select_bot.value);
         //  向后端发送请求
         store.state.pk.socket.send(
           JSON.stringify({
             event: "start-matching",
+            bot_id: select_bot.value
           })
         );
       } else {
@@ -70,6 +74,7 @@ export default {
         );
       }
     };
+
 
     //  刷新列表 得到用户所有bot
     const refresh_bots = () => {
@@ -85,50 +90,77 @@ export default {
         },
       });
     };
-
-    refresh_bots();// 云端动态获取bot
+    refresh_bots();
 
     return {
       match_btn_info,
       click_match_btn,
-      bots
+      bots,
+      select_bot
     };
   },
 };
 </script>
 
-
-<style scope>
+<style scoped lang="less">
 .matchground {
   width: 60vw;
   height: 70vh;
   margin: 40px auto;
-  background-color: pink;
+  color: rgb(35, 34, 34);
+  border-radius: 14px;
+  background-color: rgb(230, 230, 230);
 }
+
+.btn {
+  background-color: rgba(0, 201, 184, 0);
+  border: 2px solid rgba(0, 0, 0, 0.989);
+  color: black;
+  border-radius: 0ch;
+  transition: all 0.6s;
+
+  &:hover {
+    background-color: rgb(10, 10, 10);
+    color: white;
+  }
+}
+
+select {
+  color: grey;
+
+  option {
+    background-color: rgb(231, 231, 231) !important;
+  }
+}
+
 .user-photo {
   margin-top: 15vh;
   text-align: center;
 }
+
 .user-photo img {
   border-radius: 50%;
   width: 20vh;
 }
+
 .user-name {
   padding-top: 2vh;
   text-align: center;
   font-weight: 500;
   font-size: 20px;
 }
+
 .text-position {
   text-align: center;
   margin-top: 10vh;
 }
+
 .user-select-bot {
-  padding-top: 20vh;
+  padding-top: 40vh;
 }
+
 .user-select-bot > select {
   width: 60%;
-  /* 居中 */
   margin: 0 auto;
 }
 </style>

@@ -14,7 +14,7 @@
 <script>
 </script>
 
-<style scope>
+<style scoped>
 div .content-feild {
   margin-top: 20px;
 }

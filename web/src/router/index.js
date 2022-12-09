@@ -1,8 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
 //  引用几个网页 
+import home from '../views/home/home'
 import PkIndexView from "../views/pk/PkIndexView"
 import RanklistIndexView from "../views/ranklist/RanklistIndexView"
 import RecordIndexView from "../views/record/RecordIndexView"
+import RecordContentView from "../views/record/RecordContentView"
 import NotFound from "../views/error/NotFound"
 import UserBotIndexView from "../views/user/bot/UserBotIndexView"
 
@@ -17,13 +19,16 @@ const routes = [{
         // 重定向到对应页面 -> 输入 / 自动到 /pk/ 页面
         path: "/",
         name: "home",
-        redirect: "/pk/",
+        redirect: "/home/",
         meta: {
             // 是否需要授权
             requestAuth: true,
         }
     },
-
+    {
+        path: '/home/',
+        component: home
+    },
     {
         // 域名后的路径
         path: "/pk/",
@@ -34,6 +39,7 @@ const routes = [{
             // 是否需要授权
             requestAuth: true,
         }
+
     },
     // 排行榜
     {
@@ -53,6 +59,17 @@ const routes = [{
             requestAuth: true,
         }
     },
+    // 对局列表 (--:  路由加参数  :--)
+    {
+        // 冒号： 路由的参数
+        path: "/record/:recordId/",
+        name: "record_content",
+        component: RecordContentView,
+        meta: {
+            requestAuth: true,
+        }
+    },
+
     // 个人bot页面
     {
         path: "/user/bot/",
@@ -88,6 +105,7 @@ const routes = [{
         meta: {
             requestAuth: false,
         }
+
     },
     // 网址错误 自动跳转到404
     {
@@ -109,7 +127,7 @@ router.beforeEach((to, from, next) => {
 
         next({ name: "user_msg_login" });
     } else {
-        next(); //跳转到默认页面
+        next(); //跳转到默认页面 - pk页面
     }
 
     // let flag = 1;

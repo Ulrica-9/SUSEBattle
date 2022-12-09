@@ -8,6 +8,7 @@
     <modules>
         <module>matchingSys</module>
         <module>demo</module>
+        <module>codeAuto</module>
     </modules>
     <name>democloud</name>
     <description>democloud</description>

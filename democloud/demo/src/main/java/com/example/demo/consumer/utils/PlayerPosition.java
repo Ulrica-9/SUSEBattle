@@ -20,6 +20,8 @@ import java.util.List;
 @NoArgsConstructor
 public class PlayerPosition {
     private Integer id; // 当前用户id
+    private Integer BotId; // -1 自己  / 代码
+    private String BotCode;
     // 位置
     private Integer sx;
     private Integer sy;

@@ -8,6 +8,6 @@ package com.example.matchingsys.service;
  */
 public interface MatchingService {
 //    匹配池中添加一个玩家
-    String add_one_player(Integer userID,Integer rating);
+    String add_one_player(Integer userID,Integer rating,Integer botId);
     String remove_one_player(Integer userID);
 }

@@ -2,9 +2,13 @@ package com.example.demo.consumer.utils;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.consumer.WebSocketServer;
+import com.example.demo.pojo.BotInfo;
 import com.example.demo.pojo.Record;
+import com.example.demo.pojo.User;
 import lombok.Data;
 import org.springframework.security.core.parameters.P;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -50,17 +54,35 @@ public class GameMethod extends Thread{
     private String loser = "";
 
 
+    private final static String addBotURL = "http://127.0.0.1:4002/bot/add/";
 
 
-    public GameMethod(Integer rows, Integer cols, Integer inner_walls_count,Integer pA_ID,Integer pB_ID) {
+    public GameMethod(Integer rows,
+                      Integer cols,
+                      Integer inner_walls_count,
+                      Integer pA_ID,
+                      BotInfo botA,
+                      Integer pB_ID,
+                      BotInfo botB) {
         this.rows = rows;
         this.cols = cols;
         this.inner_walls_count = inner_walls_count;
         this.g = new int[rows][cols];
 
+
+        Integer botIdA = -1,botIdB = -1;
+        String botCodeA = "",botCodeB = "";
+        if(botA!=null){
+            botIdA = botA.getId();
+            botCodeA = botA.getContent();
+        }
+        if(botB!=null){
+            botIdB = botB.getId();
+            botCodeB = botB.getContent();
+        }
     //     初始化两个玩家
-        pA = new PlayerPosition(pA_ID,rows-2,1,new ArrayList<>());
-        pB = new PlayerPosition(pB_ID,1,cols-2,new ArrayList<>());
+        pA = new PlayerPosition(pA_ID,botIdA,botCodeA,rows-2,1,new ArrayList<>());
+        pB = new PlayerPosition(pB_ID,botIdB,botCodeB,1,cols-2,new ArrayList<>());
     }
 
     public PlayerPosition getpA(){
@@ -81,6 +103,8 @@ public class GameMethod extends Thread{
         }
 
     }
+
+
     public void setNextStepB(Integer nextStepB){
         reentrantLock.lock();
         try {
@@ -246,9 +270,28 @@ public class GameMethod extends Thread{
         }
 
     }
-    
+
     // 存数据库
     private void saveToDatabase(){
+        // 存储之前进行更新一下天梯积分
+        Integer rating_Pa = WebSocketServer.userMapper.selectById(pA.getId()).getRating();
+        Integer rating_Pb = WebSocketServer.userMapper.selectById(pB.getId()).getRating();
+
+
+
+        // 判断输赢
+        if("A".equals(loser)){
+            rating_Pa -=10;
+            rating_Pb +=5;
+        }else if("B".equals(loser)){
+            rating_Pa +=5;
+            rating_Pb -=10;
+        }
+
+        // 更新一下天梯分
+        updateUserRating(pA,rating_Pa);
+        updateUserRating(pB,rating_Pb);
+
         Record record = new Record(
                 null,
                 pA.getId(),
@@ -263,10 +306,20 @@ public class GameMethod extends Thread{
                 loser,
                 new Date()
         );
+
         // 放入数据库
         WebSocketServer.recordMapper.insert(record);
     }
 
+    // 每个人的天梯积分 赢了的 + 输了的 -
+   private  void updateUserRating(PlayerPosition playerPosition,Integer rating){
+       User user = WebSocketServer.userMapper.selectById(playerPosition.getId());
+
+       user.setRating(rating);
+
+       WebSocketServer.userMapper.updateById(user);
+
+   }
 
     // 地图转为字符串存到数据库
     public String getMapString(){
@@ -325,6 +378,39 @@ public class GameMethod extends Thread{
         }
     }
 
+
+    private String getInput(PlayerPosition player){
+    //    将当前局部信息变为一个字符串就可以了
+        PlayerPosition me,you;
+        if(pA.getId().equals(player.getId())){
+            me = pA;
+            you = pB;
+        }else {
+            me = pB;
+            you = pA;
+        }
+
+        return getMapString() + "#" +
+                me.getSx() + "#" +
+                me.getSy()+ "#(" +
+                me.getStepsString()+ ")#" +
+                you.getSx() + "#" +
+                you.getSy() + "#(" +
+                you.getStepsString() + ")";
+    }
+    private void sendBotCode(PlayerPosition player){
+
+        if(player.getBotId().equals(-1)) return;
+    //    否则执行代码
+
+        MultiValueMap<String,String> data = new LinkedMultiValueMap<>();
+
+        data.add("user_id",player.getId().toString());
+        data.add("bot_code",player.getBotCode());
+        data.add("input",getInput(player));
+        WebSocketServer.restTemplate.postForObject(addBotURL,data,String.class);
+
+    }
 //     辅助函数 - 等待玩家下一步操作
     private boolean nextStep(){
         try {
@@ -332,6 +418,10 @@ public class GameMethod extends Thread{
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+
+        sendBotCode(pA);
+        sendBotCode(pB);
+
 
         // sleep - 进行判断 用户看到蛇会动的延迟时间 (i 和 Thread.sleep确定)
         for (int i = 0; i < 50; i++) {
