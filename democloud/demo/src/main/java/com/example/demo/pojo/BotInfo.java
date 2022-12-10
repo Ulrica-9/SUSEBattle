@@ -36,4 +36,6 @@ public class BotInfo {
     private Date createtime;  // 创建时间
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone =  "Asia/Shanghai")
     private Date modifytime; // 修改时间
+    private String language; // 语言
+    private String play; // 哪一个游戏
 }

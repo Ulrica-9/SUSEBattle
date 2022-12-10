@@ -23,11 +23,8 @@ public class GetRecordListController{
     @Autowired
     private GetRecordListService getRecordListService;
 
-
-
     @GetMapping("/get/record/list/")
     JSONObject getList(@RequestParam Map<String,String> data){
-
         //分页进行展示
         Integer page = Integer.parseInt(data.get("page"));
         return getRecordListService.getList(page);

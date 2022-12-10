@@ -9,6 +9,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
+/**
+ * @项目名: 跨域问题解决
+ * @文件名: MybatisConfig
+ * @作者: LuoTianYu
+ * @日期:2022/11/2 12:36
+ */
+
 // 解决跨域问题
 @Configuration
 public class CorsConfig implements Filter {
@@ -36,7 +43,6 @@ public class CorsConfig implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) {
-
     }
 
     @Override

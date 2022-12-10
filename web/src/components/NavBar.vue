@@ -5,7 +5,7 @@
       <!-- <a class="navbar-brand" href="/">King of Bots</a> -->
       <!-- 注释掉的内容进行与router-link平行替换 就不会刷新页面进行跳转了 -->
       <router-link class="navbar-brand" :to="{ name: 'home' }">
-        对战平台
+        SUSE对战平台
       </router-link>
       <!--  左边选项 -->
       <div class="collapse navbar-collapse" id="navbarText">
@@ -15,7 +15,7 @@
             <!-- <a class="nav-link" aria-current="page" href="/pk/">对战</a> -->
             <!-- :calss(v-bind:class) 代表写的是表达式 -->
             <router-link :class="route_name == 'pk_index' ? 'active nav-link' : 'nav-link'" :to="{ name: 'pk_index' }">
-              对战
+              游戏对战
             </router-link>
           </li>
           <li class="nav-item">
@@ -39,7 +39,7 @@
         <!-- 右边 -->
         <ul class="navbar-nav" v-if="$store.state.user.is_login">
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
               <img :src="$store.state.user.photo" alt="" srcset="" class="img_photo"> &nbsp;
               {{ $store.state.user.username }}
             </a>
@@ -48,6 +48,11 @@
               <li>
                 <router-link class="dropdown-item" :to="{ name: 'user_bot_index' }">
                   个人仓库
+                </router-link>
+              </li>
+              <li>
+                <router-link class="dropdown-item" :to="{ name: 'perInfo' }">
+                  个人信息
                 </router-link>
               </li>
               <li>

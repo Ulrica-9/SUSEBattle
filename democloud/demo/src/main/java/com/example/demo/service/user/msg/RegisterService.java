@@ -1,5 +1,7 @@
 package com.example.demo.service.user.msg;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.Map;
 
 /**
@@ -12,5 +14,5 @@ import java.util.Map;
 // 注册
 public interface RegisterService {
     // 用户注册信息 - 需要用户输入两次密码 pwd pwd2
-    public Map<String,String> getRegister(String name,String pwd,String pwd2,String pic);
+    public Map<String,String> getRegister(String name, String pwd, String pwd2, MultipartFile pic, String school, String email, String personal, String sex);
 }

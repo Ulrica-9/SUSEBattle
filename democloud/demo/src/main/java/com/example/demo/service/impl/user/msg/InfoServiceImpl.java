@@ -29,14 +29,17 @@ public class InfoServiceImpl implements InfoService {
         UserDetailsImpl loginUser = (UserDetailsImpl) authenticationToken.getPrincipal();
         User user = loginUser.getUser();
 
-
-
         Map<String, String> map = new HashMap<>();
         map.put("error_message","success");
         map.put("id",user.getId().toString());
         map.put("username",user.getUsername());
-        //map.put("password",user.getPassword().toString());
         map.put("photo",user.getPhoto());
+        map.put("email",user.getEmail());
+        map.put("sex",user.getSex());
+        map.put("personal",user.getPersonal());
+        map.put("rating",user.getRating().toString()); //天梯分
+        map.put("school",user.getSchool());
         return map;
     }
+
 }

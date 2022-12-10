@@ -14,7 +14,7 @@
             <!--  会显示 -->
             <input type="file" name="file" id="file" @change="previewFile"><br>
             <img src="" height="200" alt="Image preview..." class="img_">
-            <button type="button" @click="button_images" class="btn btn-warning">上传头像</button>
+
           </div>
 
           <!-- 个人信息页面的加载 -->
@@ -110,32 +110,6 @@ export default {
     $("#email").attr("disabled", false); // 解绑
     const close = () => {
       router.push({ name: "home" }); // 返回登录界面
-    }
-
-    //  上传头像
-
-
-
-
-    const button_images = () => {
-      //  进行文件上传
-      let dd = document.querySelector("#file");
-      let files = dd.files;
-      let file = files[0];
-      var formData = new FormData();
-      formData.append("file", file);
-      console.log(formData);
-      $.ajax({
-        url: "http://127.0.0.1:4000/set/images/", // 进行交换数据
-        type: "post",
-        data: formData,
-        // 设置属性为false
-        contentType: false,
-        processData: false,
-        success(resp) {
-          console.log(resp);
-        }
-      });
     }
 
     //  邮箱验证 专门接口
@@ -260,7 +234,7 @@ export default {
       email_msg,
       text,
       code_input,
-      button_images,
+
       previewFile
       // school
     };

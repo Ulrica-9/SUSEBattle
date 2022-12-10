@@ -40,6 +40,8 @@ public class AddBotServiceImpl implements AddBotService {
         String bot_name = data.get("name");
         String bot_description = data.get("description");
         String bot_content = data.get("content");
+        String bot_language = data.get("language");
+        String bot_play = data.get("play");
 
         Map<String,String> map = new HashMap<>();
         if(bot_name == null || bot_name.length() ==0 ){
@@ -54,7 +56,7 @@ public class AddBotServiceImpl implements AddBotService {
         // 描述可以为空 但是长度限制
         // 我们还是提供一个默认描述
         if(bot_description == null || bot_description.length() ==0){
-            bot_description = "这是一个强大的Bot";
+            bot_description = "用户很懒，没有描述.";
         }
         if(bot_description.length() > 300){
             map.put("error_msg","描述长度不能大于300");
@@ -70,10 +72,25 @@ public class AddBotServiceImpl implements AddBotService {
             return map;
         }
 
+        // 语言
+        if(bot_language == null || bot_language.length() ==0 ){
+           bot_language = "Java";
+        }
+        if(!bot_language.equals("Java")){
+            map.put("error_msg","目前只支持Java哦.");
+            return map;
+        }
+        if(bot_play== null || bot_play.length() ==0 ){
+            bot_play = "贪吃蛇";
+        }
+        if(!bot_play.equals("贪吃蛇")){
+            map.put("error_msg","目前只开放了贪吃蛇的脚本哦.");
+            return map;
+        }
         // 创建时间 + 修改时间
         Date now = new Date();
         // Bot
-        BotInfo botInfo = new BotInfo(null, user.getId(), bot_name,bot_description,bot_content,now,now);
+        BotInfo botInfo = new BotInfo(null, user.getId(), bot_name,bot_description,bot_content,now,now,bot_language,bot_play);
         botMapper.insert(botInfo);
 
         map.put("error_msg","success");

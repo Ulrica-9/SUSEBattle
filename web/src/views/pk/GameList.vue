@@ -5,9 +5,9 @@
       <div class="entrance">
         <span class="title">贪吃蛇</span>
         <div class="btn-group">
-          <button @click="singlePlaying('snakeSinglePlaying')">单人闯关</button>
-          <button>多人排位赛</button>
-          <button>双人单机对战</button>
+          <router-link :to="{name:'snake'}" class="button">真人排位赛</router-link>
+          <router-link :to="{name:'test'}" class="button">脚本排位赛</router-link>
+          <router-link :to="{name:'snakeCon'}" class="button">双人单机对战</router-link>
         </div>
       </div>
     </section>
@@ -19,31 +19,15 @@
           <!-- <router-link class="nav-link" :to="{ name: 'pk' }" role="button">
             登录
           </router-link> -->
-          <button @click="singlePlaying('gobangSinglePlaying')">单人闯关</button>
-          <button>多人排位赛</button>
-          <button>双人单机对战</button>
+          <router-link :to="{name:'snakeCon'}" class="button">双人单机对战</router-link>
         </div>
       </div>
     </section>
   </div>
 </template>
 <script>
-import router from "../../router/index";
 export default {
   name: 'GameList',
-  setup(props, context) {
-    function singlePlaying(gameType) {
-      if (gameType === "snakeSinglePlaying") {
-        context.emit('snakeSinglePlaying', "isSnakeSinglePlaying", true)
-      } else if (gameType === "gobangSinglePlaying") {
-        context.emit('gobangSinglePlaying', "isGobangSinglePlaying", true)
-      }
-      // router.push({ name: "user_msg_login" });
-    }
-    return {
-      singlePlaying
-    }
-  }
 }
 </script>
 <style lang="less" scoped>
@@ -97,12 +81,13 @@ export default {
         display: flex;
         justify-content: center;
 
-        button {
+        a.button {
           display: block;
           background-color: rgba(255, 255, 255, 0);
           border: 2px solid rgb(0, 0, 0);
           transition: all 0.15s;
           padding: 5px 5px 5px 5px;
+          color: black;
 
           &:hover {
             background-color: rgb(10, 10, 10);

@@ -19,9 +19,16 @@ public class User {
     @TableId(type = IdType.AUTO) // 实现id自增 -> +1
     private Integer id;
     private String username; // 姓名
+
     private String password; // 密码
     private String photo; // 头像
     private Integer rating; // 排位分数
+    private String school; // 学校
+    private String email; // 邮件
+    private String personal; // 个人介绍
+    private String sex; // 性别
+
+
 //     大学
 //    性别
 //    联系方式

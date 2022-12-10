@@ -1,6 +1,5 @@
 <template>
-  <transition-group appear name="animate__animated animate__bounce"
-    enter-active-class="animate__animated animate__backInDown" leave-active-class="animate__backOutUp">
+  <transition-group appear name="animate__animated animate__bounce" enter-active-class="animate__animated animate__backInDown" leave-active-class="animate__backOutUp">
     <ContentField key="1">
       <table class="table table-striped table-hover" style="text-align: center">
         <thead>
@@ -8,7 +7,7 @@
             <th>排名</th>
             <th>头像</th>
             <th>昵称</th>
-            <th>天梯分</th>
+            <th>天梯分(汇总)</th>
           </tr>
         </thead>
         <tbody>
@@ -27,22 +26,21 @@
         </tbody>
       </table>
 
-      <nav aria-label="Page navigation example">
-        <ul class="pagination text-right">
+      <nav aria-label="...">
+        <ul class="pagination" style="float:right">
           <li class="page-item" @click="click_page(0)">
             <a class="page-link" href="#" aria-label="Previous">
               <span aria-hidden="true">&laquo;</span>
             </a>
           </li>
 
-          <li :class="'page-item ' + page.is_active" v-for="page in pages" :key="page.number"
-            @click="click_page(page.number)">
+          <li :class="'page-item ' + page.is_active" v-for="page in pages" :key="page.number" @click="click_page(page.number)">
             <a class="page-link" href="#">
               {{ page.number }}
             </a>
           </li>
 
-          <li class="page-item" @click="click_page(1)">
+          <li class="page-item" @click="click_page(-1)">
             <a class="page-link" href="#" aria-label="Next">
               <span aria-hidden="true">&raquo;</span>
             </a>
@@ -77,19 +75,18 @@ export default {
     console.log(total_users)
     // 点击切换网页
     const click_page = page => {
-      //  0 前一页
-      if (page === 0) page = current_page - 1
-      //  -1 后一页
-      else if (page === 1) page = current_page + 1
-      let max_pages = parseInt(Math.ceil(total_users / 10))
+
+      if (page === 0) page = current_page - 1//  0 前一页
+      else if (page === -1) page = current_page + 1 //  -1 后一页
+      let max_pages = parseInt(Math.ceil(total_users / 20))
       //  中间就是正整数
-      if (page >= 1 && page <= max_pages) {
+      if (page > 0 && page <= max_pages) {
         pull_page(page)
       }
     }
 
     const udpate_pages = () => {
-      let max_pages = parseInt(Math.ceil(total_users / 10)) // 一共有多少页面
+      let max_pages = parseInt(Math.ceil(total_users / 20)) // 一共有多少页面
       let arr = []
       for (let i = current_page - 2; i <= current_page + 2; i++) {
         if (i >= 1 && i <= max_pages) {
@@ -111,11 +108,11 @@ export default {
           page
         },
         type: 'get',
-
         headers: {
           Authorization: 'Bearer ' + store.state.user.token
         },
         success(resp) {
+          console.log(resp);
           users.value = resp.users
           total_users = resp.users_count
           udpate_pages() // 更新页面
@@ -132,7 +129,8 @@ export default {
       users,
       pages,
       click_page,
-      idx
+      idx,
+      total_users
     }
   }
 }
@@ -155,9 +153,5 @@ img {
 .record_photo {
   width: 5vh;
   border-radius: 50%;
-}
-
-.page-link {
-  color: rgb(84, 84, 84);
 }
 </style>

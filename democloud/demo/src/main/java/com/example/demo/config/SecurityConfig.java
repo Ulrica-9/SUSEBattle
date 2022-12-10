@@ -38,7 +38,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/user/msg/token/", "/user/msg/register/").permitAll()
+                .antMatchers("/user/msg/token/",
+                        "/user/msg/register/",
+                        "/user/email/",
+                        "/set/images/",
+                        "/play/temp/"
+                        ).permitAll()
                 .antMatchers("/pk/start/game/","/pk/receive/bot/move/").hasIpAddress("127.0.0.1")
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .anyRequest().authenticated();
@@ -49,6 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/websocket/**");
+        web.ignoring().antMatchers("/img/**"); // 开放端口
     }
 }
 

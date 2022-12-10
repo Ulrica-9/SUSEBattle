@@ -19,16 +19,38 @@
         <li>5. 回到对战页面，点击开始匹配，与他人或其他 Bot 开始对战</li>
       </ul>
     </section>
-    <router-link
-      class="start animate__animated animate__fadeInUp"
-      :to="{ name: 'pk_index' }"
-    >
+    <router-link class="start animate__animated animate__fadeInUp" :to="{ name: 'pk_index' }">
       <span class="iconfont">开始吧!&nbsp;&#xeb08;</span>
     </router-link>
   </div>
 </template>
 <script>
-export default {}
+
+import { useStore } from "vuex";
+
+
+import router from "../../router/index";
+export default {
+
+  setup() {
+    const store = useStore();
+    //  进入登录页面就判断本地是否有token
+    const jwt_token = localStorage.getItem("jwt_token");
+    if (jwt_token) {
+      store.commit("updateToken", jwt_token);
+      // 验证合法性 [云端获取用户信息]
+      store.dispatch("getinfo", {
+        // 成功就自动跳入首页
+        success() {
+          router.push({ name: "home" });
+        },
+        error() { },
+      });
+    }
+    return {
+    };
+  },
+};
 </script>
 <style lang="less" scoped>
 div.main {

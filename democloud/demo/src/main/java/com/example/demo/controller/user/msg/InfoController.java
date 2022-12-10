@@ -18,7 +18,6 @@ public class InfoController {
     @Autowired
     private InfoService infoService;
 
-
     // 得到信息就是get了
     @GetMapping("/user/msg/info/")
     public Map<String, String> getinfo() {

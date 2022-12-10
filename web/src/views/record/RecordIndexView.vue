@@ -3,9 +3,10 @@
     <table class="table table-striped table-hover">
       <thead>
         <tr class="the_test_one">
-          <th>玩家1</th>
-          <th>玩家2</th>
+          <th>玩家 A</th>
+          <th>玩家 B</th>
           <th>对战时间</th>
+          <th>游戏类别</th>
           <th>对战结果</th>
           <th>对战回放</th>
         </tr>
@@ -26,17 +27,19 @@
               {{ record.b_username }}
             </span>
           </td>
+
           <td>
             {{ record.record.createtime }}
           </td>
-
+          <td>
+            贪吃蛇
+          </td>
           <td>
             {{ record.result }}
           </td>
 
           <td>
-            <button type="button" class="btn btn-success" style="margin-right: 10px"
-              @click="open_record_content(record.record.id)">
+            <button type="button" class="btn btn-success" style="margin-right: 10px" @click="open_record_content(record.record.id)">
               查看
             </button>
           </td>
@@ -52,14 +55,13 @@
           </a>
         </li>
 
-        <li :class="'page-item ' + page.is_active" v-for="page in pages" :key="page.number"
-          @click="click_page(page.number)">
+        <li :class="'page-item ' + page.is_active" v-for="page in pages" :key="page.number" @click="click_page(page.number)">
           <a class="page-link" href="#">
             {{ page.number }}
           </a>
         </li>
 
-        <li class="page-item" @click="click_page(1)">
+        <li class="page-item" @click="click_page(-1)">
           <a class="page-link" href="#" aria-label="Next">
             <span aria-hidden="true">&raquo;</span>
           </a>
@@ -91,13 +93,13 @@ export default {
     let pages = ref([])
     let total_records = 0
 
-    console.log(total_records)
+
     // 点击切换网页
     const click_page = page => {
       //  0 前一页
       if (page === 0) page = current_page - 1
       //  -1 后一页
-      else if (page === 1) page = current_page + 1
+      else if (page === -1) page = current_page + 1
       let max_pages = parseInt(Math.ceil(total_records / 10))
       //  中间就是正整数
       if (page >= 1 && page <= max_pages) {
@@ -224,9 +226,5 @@ img {
 .record_photo {
   width: 5vh;
   border-radius: 50%;
-}
-
-.page-link {
-  color: rgb(84, 84, 84);
 }
 </style>

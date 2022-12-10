@@ -3,10 +3,10 @@
   <div class="playground">
     <GameMap />
     <div v-if="$store.state.pk.a_id === parseInt($store.state.user.id)">
-      出生在蓝色方
+      出生在黄色方
     </div>
     <div v-else>
-      出生在红色方
+      出生在粉色方
     </div>
   </div>
 </template>

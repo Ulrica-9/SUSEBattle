@@ -35,10 +35,14 @@ public class UpdateBotServiceImpl implements UpdateBotService {
         UserDetailsImpl loginUser = (UserDetailsImpl) authenticationToken.getPrincipal();
         User user = loginUser.getUser();
 
+
         int bot_id = Integer.parseInt(data.get("bot_id"));
         String bot_name = data.get("name");
         String bot_description = data.get("description");
         String bot_content = data.get("content");
+        String bot_language = "Java";
+        String play = "贪吃蛇";
+
 
         Map<String,String> map = new HashMap<>();
         if(bot_name == null || bot_name.length() ==0 ){
@@ -70,12 +74,29 @@ public class UpdateBotServiceImpl implements UpdateBotService {
             map.put("error_msg","bot不存在或已被删除");
             return map;
         }
+        // 语言
+        if(bot_language == null || bot_language.length() ==0 ){
+            map.put("error_msg","代码语言部分不能为空");
+            return map;
+        }
+        if(!bot_language.equals("Java")){
+            map.put("error_msg","目前只支持Java哦.");
+            return map;
+        }
+        if(play== null || play.length() ==0 ){
+            map.put("error_msg","游戏类别不能为空");
+            return map;
+        }
+        if(!play.equals("贪吃蛇")){
+            map.put("error_msg","目前只开放了贪吃蛇的脚本哦.");
+            return map;
+        }
+
         // 用户是否一致
         if(!botInfo.getUserId().equals(user.getId())){
             map.put("error_msg","没有权限");
             return map;
         }
-
         // 更新信息
         BotInfo bot = new BotInfo(
                 botInfo.getId(),
@@ -84,9 +105,10 @@ public class UpdateBotServiceImpl implements UpdateBotService {
                 bot_description,
                 bot_content,
                 botInfo.getCreatetime(),
-                new Date() // 当前时间 - 修改的时间
+                new Date(), // 当前时间 -> 修改的时间
+                bot_language,
+                play
         );
-
         botMapper.updateById(bot);
         map.put("error_msg","修改成功");
         return map;

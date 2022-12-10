@@ -11,8 +11,6 @@ export class Snake extends AcGameObject {
         // 传送过来蛇的信息 和  地图
 
         super();
-
-
         // 每个每个蛇的id和颜色 取来 区分两条蛇
         this.id = info.id;
         this.color = info.color;

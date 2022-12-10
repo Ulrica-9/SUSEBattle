@@ -32,13 +32,10 @@ public class GetRankListServiceImpl implements GetRankListService {
     @Override
     public JSONObject getList(Integer page) {
         // 可以查询所有的用户
-        IPage<User> userIPage = new Page<>(page,10); // 每页展示个数
+        IPage<User> userIPage = new Page<>(page,20); // 每页展示个数
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-
         queryWrapper.orderByDesc("rating"); // 按照rating 天梯分来进行排序
-
         List<User> users = userMapper.selectPage(userIPage,queryWrapper).getRecords();
-
         JSONObject resp = new JSONObject();
         //防止密码泄露  返回之前 密码清空
         for (User user:

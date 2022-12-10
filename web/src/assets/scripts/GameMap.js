@@ -22,8 +22,8 @@ export class GameMap extends AcGameObject {
 
         // 创建蛇 (创建两条蛇)
         this.snakes = [
-            new Snake({ id: 0, color: '#4876Ec', r: this.rows - 2, c: 1 }, this),
-            new Snake({ id: 1, color: '#F94848', r: 1, c: this.cols - 2 }, this)
+            new Snake({ id: 0, color: 'yellow', r: this.rows - 2, c: 1 }, this),
+            new Snake({ id: 1, color: 'pink', r: 1, c: this.cols - 2 }, this)
         ];
 
     }

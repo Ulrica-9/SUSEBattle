@@ -15,7 +15,7 @@
 
             <span class="record-user-username">
               Hi~<H3>{{$store.state.user.username}}</H3>
-              快来bot一下吧~
+
             </span>
 
           </div>
@@ -26,7 +26,7 @@
       <div class="col-9">
         <div class="card" style="margin-top: 20px">
           <div class="card-header">
-            <span class="title">我的Bot仓库</span>
+            <span class="title">我的脚本仓库</span>
             <button type="button" class="btn btn-warning float-end" data-bs-toggle="modal" data-bs-target="#add_bot_btn">
               新建一个Bot
             </button>
@@ -44,14 +44,26 @@
                   <div class="modal-body">
                     <div class="mb-3">
                       <!-- bot标题 -->
-                      <label for="add-bot-title" class="form-label">Bot名称</label>
+                      <label for="add-bot-title" class="form-label">脚本名称</label>
                       <input v-model="botadd.name" type="text" class="form-control" id="add-bot-title" placeholder="为您的bot取一个名字吧" />
+                    </div>
+                    <div class="mb-3">
+                      <!-- bot对应游戏 -->
+                      <label for="add-bot-play" class="form-label">脚本对应游戏</label>
+                      <input v-model="botadd.play" type="text" class="form-control" id="add-bot-play" placeholder="Snake" disabled />
+                    </div>
+
+                    <div class="mb-3">
+                      <!-- bot语言 -->
+                      <label for="add-bot-language" class="form-label">脚本语言</label>
+                      <input v-model="botadd.language" type="text" class="form-control" id="add-bot-language" placeholder="Java" disabled />
                     </div>
                     <!-- 描述部分 -->
                     <div class="mb-3">
-                      <label for="add-bot-description" class="form-label">描述</label>
+                      <label for="add-bot-description" class="form-label">脚本描述</label>
                       <textarea v-model="botadd.description" class="form-control" id="add-bot-description" rows="3" placeholder="描述一下你的bot吧"></textarea>
                     </div>
+
                     <!-- 代码块 -->
                     <div class="mb-3">
                       <label for="add-bot-code" class="form-label">代码</label>
@@ -90,10 +102,12 @@
             <table class="table table-striped table-hover">
               <thead>
                 <tr>
-                  <th>对战Bot名称</th>
+                  <th>脚本名称</th>
                   <th>描述</th>
-                  <th>创建时间</th>
+                  <th>脚本语言</th>
+                  <th>游戏</th>
                   <th>修改时间</th>
+
                   <th>操作</th>
                 </tr>
               </thead>
@@ -101,7 +115,8 @@
                 <tr v-for="bot in bots" :key="bot.id">
                   <td>{{ bot.name }}</td>
                   <td>{{ bot.description }}</td>
-                  <td>{{ bot.createtime }}</td>
+                  <td>{{ bot.language }}</td>
+                  <td>{{ bot.play }}</td>
                   <td>{{ bot.modifytime }}</td>
                   <td>
                     <button type="button" class="btn btn-success" style="margin-right: 10px" data-bs-toggle="modal" :data-bs-target="'#update-bot-modal-' + bot.id">
@@ -124,14 +139,26 @@
                           <div class="modal-body">
                             <div class="mb-3">
                               <!-- bot标题 -->
-                              <label for="add-bot-title" class="form-label">Bot名称</label>
+                              <label for="add-bot-title" class="form-label">脚本名称</label>
                               <input v-model="bot.name" type="text" class="form-control" id="add-bot-title" placeholder="为您的bot取一个名字吧" />
+                            </div>
+
+                            <div class="mb-3">
+                              <!-- bot对应游戏 -->
+                              <label for="add-bot-title" class="form-label">脚本对应游戏</label>
+                              <input v-model="botadd.play" type="text" class="form-control" id="add-bot-play" placeholder="Snake" disabled />
+                            </div>
+                            <div class="mb-3">
+                              <!-- bot语言 -->
+                              <label for="add-bot-title" class="form-label">脚本语言</label>
+                              <input v-model="botadd.language" type="text" class="form-control" id="add-bot-language" placeholder="Java" disabled />
                             </div>
                             <!-- 描述部分 -->
                             <div class="mb-3">
-                              <label for="add-bot-description" class="form-label">描述</label>
+                              <label for="add-bot-description" class="form-label">脚本描述</label>
                               <textarea v-model="bot.description" class="form-control" id="add-bot-description" rows="3" placeholder="描述一下你的bot吧"></textarea>
                             </div>
+
                             <!-- 代码块 -->
                             <div class="mb-3">
                               <label for="add-bot-code" class="form-label">代码</label>
@@ -207,6 +234,8 @@ export default {
       description: "",
       content: "",
       error_msg: "",
+      play: "",
+      language: ""
     });
 
     //  刷新列表 得到用户所有bot
@@ -227,6 +256,7 @@ export default {
 
     // 新增
     const add_bot = () => {
+
       (botadd.error_msg = ""),
         $.ajax({
           url: "http://127.0.0.1:4000/user/bot/add/",
@@ -235,6 +265,8 @@ export default {
             name: botadd.name,
             description: botadd.description,
             content: botadd.content,
+            play: botadd.play,
+            language: botadd.language
           },
           headers: {
             Authorization: "Bearer " + store.state.user.token,
@@ -244,6 +276,8 @@ export default {
               botadd.name = "";
               botadd.description = "";
               botadd.content = "";
+              botadd.play = "";
+              botadd.language = "";
               Modal.getInstance("#add_bot_btn").hide(); // 关闭
               refresh_bots(); // 刷新列表
             } else {
@@ -284,6 +318,8 @@ export default {
             name: bot.name,
             description: bot.description,
             content: bot.content,
+            play: botadd.play,
+            language: botadd.language
           },
           headers: {
             Authorization: "Bearer " + store.state.user.token,
